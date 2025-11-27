@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISO LAB</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div id="splash">
+    <img src="logo.png" id="splash-logo">
+    <h1>ISO LAB</h1>
+</div>
+<div id="app" class="hidden">
+<header><img src="logo.png" class="logo"><h1>ISO LAB</h1></header>
+<nav>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('training')">Training</button>
+<button onclick="showPage('meals')">Meals</button>
+<button onclick="showPage('running')">Running</button>
+<button onclick="showPage('supplements')">Supplements</button>
+<button onclick="showPage('progression')">Progression</button>
+</nav>
+<section id="dashboard" class="page active"><h2>Welcome to ISO LAB</h2></section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

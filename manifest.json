@@ -1,0 +1,8 @@
+{
+"name":"ISO LAB",
+"short_name":"ISO LAB",
+"start_url":"./index.html",
+"display":"standalone",
+"background_color":"#2738C8",
+"theme_color":"#2738C8"
+}
