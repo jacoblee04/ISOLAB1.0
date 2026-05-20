@@ -478,7 +478,10 @@ function completeOnboarding() {
 function startApp() {
   $('app').classList.remove('hidden');
   updateSidebarUser();
-  showPage('dashboard');
+  // Support manifest shortcuts via URL hash e.g. index.html#training
+  const hash = location.hash.replace('#','');
+  const validPages = ['dashboard','training','meals','planner','calendar','notes','budget','progress','profile','running','supplements','more'];
+  showPage(validPages.includes(hash) ? hash : 'dashboard');
 }
 
 function formatGoals(user) {
