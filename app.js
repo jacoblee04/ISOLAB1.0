@@ -14,36 +14,67 @@ const EXERCISES = {
 };
 
 const FOODS = [
-  {n:'Chicken Breast (100g)',  cal:165, p:31,  c:0,  f:3.6},
-  {n:'Rice, cooked (100g)',    cal:130, p:2.7, c:28, f:0.3},
-  {n:'Eggs (1 large)',         cal:72,  p:6,   c:0.4,f:5},
-  {n:'Oats (100g)',            cal:389, p:17,  c:66, f:7},
-  {n:'Greek Yogurt (100g)',    cal:59,  p:10,  c:3.6,f:0.4},
-  {n:'Banana (medium)',        cal:89,  p:1.1, c:23, f:0.3},
-  {n:'Whey Protein (scoop)',   cal:120, p:25,  c:3,  f:2},
-  {n:'Salmon (100g)',          cal:208, p:20,  c:0,  f:13},
-  {n:'Sweet Potato (100g)',    cal:86,  p:1.6, c:20, f:0.1},
-  {n:'Almonds (30g)',          cal:173, p:6,   c:6,  f:15},
-  {n:'Broccoli (100g)',        cal:34,  p:2.8, c:7,  f:0.4},
-  {n:'Tuna (100g)',            cal:116, p:26,  c:0,  f:1},
-  {n:'Whole Wheat Bread (1 slice)',cal:79,p:4, c:15, f:1},
-  {n:'Whole Milk (250ml)',     cal:149, p:8,   c:12, f:8},
-  {n:'Peanut Butter (2 tbsp)',cal:188,  p:8,   c:6,  f:16},
-  {n:'Apple (medium)',         cal:95,  p:0.5, c:25, f:0.3},
-  {n:'Beef, lean (100g)',      cal:215, p:26,  c:0,  f:12},
-  {n:'Cottage Cheese (100g)', cal:72,  p:12,  c:3,  f:1},
-  {n:'Pasta, cooked (100g)',  cal:158, p:5.8, c:31, f:0.9},
-  {n:'Avocado (100g)',        cal:160, p:2,   c:9,  f:15},
-  {n:'Blueberries (100g)',    cal:57,  p:0.7, c:14, f:0.3},
-  {n:'Steak (100g)',          cal:250, p:26,  c:0,  f:17},
-  {n:'Orange (medium)',       cal:62,  p:1.2, c:15, f:0.2},
-  {n:'Mixed Nuts (30g)',      cal:185, p:4.5, c:6,  f:17},
-  {n:'Protein Bar',           cal:200, p:20,  c:22, f:7},
-  {n:'Bagel (plain)',         cal:270, p:9,   c:52, f:1.5},
-  {n:'Quinoa (100g cooked)',  cal:120, p:4.4, c:22, f:1.9},
-  {n:'Lentils (100g cooked)', cal:116, p:9,   c:20, f:0.4},
-  {n:'Tofu (100g)',           cal:76,  p:8,   c:1.9,f:4.8},
-  {n:'Dark Chocolate (30g)', cal:170, p:2,   c:14, f:12},
+  {n:'Chicken Breast',    base:100, unit:'g',      cal:165, p:31,  c:0,   f:3.6},
+  {n:'Rice, cooked',      base:100, unit:'g',      cal:130, p:2.7, c:28,  f:0.3},
+  {n:'Egg',               base:1,   unit:'egg',    cal:72,  p:6,   c:0.4, f:5},
+  {n:'Oats (dry)',        base:100, unit:'g',      cal:389, p:17,  c:66,  f:7},
+  {n:'Greek Yogurt',      base:100, unit:'g',      cal:59,  p:10,  c:3.6, f:0.4},
+  {n:'Banana',            base:1,   unit:'medium', cal:89,  p:1.1, c:23,  f:0.3},
+  {n:'Whey Protein',      base:1,   unit:'scoop',  cal:120, p:25,  c:3,   f:2},
+  {n:'Salmon',            base:100, unit:'g',      cal:208, p:20,  c:0,   f:13},
+  {n:'Sweet Potato',      base:100, unit:'g',      cal:86,  p:1.6, c:20,  f:0.1},
+  {n:'Almonds',           base:30,  unit:'g',      cal:173, p:6,   c:6,   f:15},
+  {n:'Broccoli',          base:100, unit:'g',      cal:34,  p:2.8, c:7,   f:0.4},
+  {n:'Tuna (canned)',     base:100, unit:'g',      cal:116, p:26,  c:0,   f:1},
+  {n:'Whole Wheat Bread', base:1,   unit:'slice',  cal:79,  p:4,   c:15,  f:1},
+  {n:'Whole Milk',        base:250, unit:'ml',     cal:149, p:8,   c:12,  f:8},
+  {n:'Peanut Butter',     base:2,   unit:'tbsp',   cal:188, p:8,   c:6,   f:16},
+  {n:'Apple',             base:1,   unit:'medium', cal:95,  p:0.5, c:25,  f:0.3},
+  {n:'Beef, lean',        base:100, unit:'g',      cal:215, p:26,  c:0,   f:12},
+  {n:'Cottage Cheese',    base:100, unit:'g',      cal:72,  p:12,  c:3,   f:1},
+  {n:'Pasta, cooked',     base:100, unit:'g',      cal:158, p:5.8, c:31,  f:0.9},
+  {n:'Avocado',           base:100, unit:'g',      cal:160, p:2,   c:9,   f:15},
+  {n:'Blueberries',       base:100, unit:'g',      cal:57,  p:0.7, c:14,  f:0.3},
+  {n:'Steak',             base:100, unit:'g',      cal:250, p:26,  c:0,   f:17},
+  {n:'Orange',            base:1,   unit:'medium', cal:62,  p:1.2, c:15,  f:0.2},
+  {n:'Mixed Nuts',        base:30,  unit:'g',      cal:185, p:4.5, c:6,   f:17},
+  {n:'Protein Bar',       base:1,   unit:'bar',    cal:200, p:20,  c:22,  f:7},
+  {n:'Bagel (plain)',     base:1,   unit:'bagel',  cal:270, p:9,   c:52,  f:1.5},
+  {n:'Quinoa, cooked',    base:100, unit:'g',      cal:120, p:4.4, c:22,  f:1.9},
+  {n:'Lentils, cooked',   base:100, unit:'g',      cal:116, p:9,   c:20,  f:0.4},
+  {n:'Tofu',              base:100, unit:'g',      cal:76,  p:8,   c:1.9, f:4.8},
+  {n:'Dark Chocolate',    base:30,  unit:'g',      cal:170, p:2,   c:14,  f:12},
+  {n:'Turkey Breast',     base:100, unit:'g',      cal:135, p:30,  c:0,   f:1},
+  {n:'White Potato',      base:100, unit:'g',      cal:77,  p:2,   c:17,  f:0.1},
+  {n:'Cheddar Cheese',    base:30,  unit:'g',      cal:120, p:7,   c:0.4, f:10},
+  {n:'Bread, white',      base:1,   unit:'slice',  cal:67,  p:2.3, c:13,  f:0.9},
+  {n:'Orange Juice',      base:250, unit:'ml',     cal:112, p:1.7, c:26,  f:0.5},
+  {n:'Olive Oil',         base:1,   unit:'tbsp',   cal:119, p:0,   c:0,   f:13.5},
+  {n:'Butter',            base:10,  unit:'g',      cal:72,  p:0.1, c:0,   f:8.1},
+  {n:'Honey',             base:1,   unit:'tbsp',   cal:64,  p:0.1, c:17,  f:0},
+  {n:'Kidney Beans',      base:100, unit:'g',      cal:127, p:8.7, c:22,  f:0.5},
+  {n:'Mozzarella',        base:100, unit:'g',      cal:280, p:28,  c:3.1, f:17},
+];
+
+const CURRENCIES = [
+  {code:'GBP', symbol:'£',    name:'British Pound'},
+  {code:'USD', symbol:'$',    name:'US Dollar'},
+  {code:'EUR', symbol:'€',    name:'Euro'},
+  {code:'AUD', symbol:'A$',   name:'Australian Dollar'},
+  {code:'CAD', symbol:'C$',   name:'Canadian Dollar'},
+  {code:'NZD', symbol:'NZ$',  name:'New Zealand Dollar'},
+  {code:'SGD', symbol:'S$',   name:'Singapore Dollar'},
+  {code:'CHF', symbol:'Fr',   name:'Swiss Franc'},
+  {code:'JPY', symbol:'¥',    name:'Japanese Yen'},
+  {code:'INR', symbol:'₹',    name:'Indian Rupee'},
+  {code:'ZAR', symbol:'R',    name:'South African Rand'},
+  {code:'AED', symbol:'AED ', name:'UAE Dirham'},
+  {code:'NOK', symbol:'kr',   name:'Norwegian Krone'},
+  {code:'SEK', symbol:'kr',   name:'Swedish Krona'},
+  {code:'BRL', symbol:'R$',   name:'Brazilian Real'},
+  {code:'MXN', symbol:'Mex$', name:'Mexican Peso'},
+  {code:'HKD', symbol:'HK$',  name:'Hong Kong Dollar'},
+  {code:'CNY', symbol:'¥',    name:'Chinese Yuan'},
 ];
 
 const BUDGET_CATS = [
@@ -60,11 +91,13 @@ const BUDGET_CATS = [
 ];
 
 const GOAL_LABELS = {
-  muscle:   'Build Muscle',
-  fat:      'Lose Fat',
-  strength: 'Get Stronger',
-  fitness:  'General Fitness',
-  sport:    'Athletic Performance',
+  muscle:    'Build Muscle',
+  fat:       'Lose Fat',
+  strength:  'Get Stronger',
+  fitness:   'General Fitness',
+  sport:     'Athletic Performance',
+  recomp:    'Body Recomposition',
+  endurance: 'Build Endurance',
 };
 
 // ─── STATE ────────────────────────────────────────────────────
@@ -104,8 +137,12 @@ const clamp = (v,min,max) => Math.max(min,Math.min(max,v));
 function fmtDate(d) {
   return new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 }
+function currencySymbol() {
+  const code = S.user?.currency || 'GBP';
+  return (CURRENCIES.find(c=>c.code===code) || CURRENCIES[0]).symbol;
+}
 function fmtMoney(n) {
-  return (n<0?'-':'')+'£'+Math.abs(n).toFixed(2);
+  return (n<0?'-':'')+currencySymbol()+Math.abs(n).toFixed(2);
 }
 function getInitials(name) {
   return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
@@ -133,28 +170,47 @@ function calculateTargets(user) {
   // Activity multiplier
   const actMap = {3:1.375, 4:1.45, 5:1.55, 6:1.65};
   const tdee = bmr * (actMap[user.days] || 1.375);
+
+  // Support goals array (new) or legacy single goal string
+  const goals = user.goals || (user.goal ? [user.goal] : ['fitness']);
+  const primary = goals[0];
+
   let calories, protein, carbs, fat;
-  if (user.goal === 'muscle') { calories = Math.round(tdee+300); protein = Math.round(w*2.2); }
-  else if (user.goal === 'fat') { calories = Math.round(tdee-400); protein = Math.round(w*2.4); }
-  else if (user.goal === 'strength') { calories = Math.round(tdee+100); protein = Math.round(w*2.0); }
-  else { calories = Math.round(tdee); protein = Math.round(w*1.8); }
-  fat   = Math.round((calories*0.28)/9);
-  carbs = Math.round((calories - protein*4 - fat*9)/4);
+  // Combination goals take precedence
+  if (goals.includes('muscle') && goals.includes('fat')) {
+    calories = Math.round(tdee + 50); protein = Math.round(w * 2.4);
+  } else if (primary === 'muscle') {
+    calories = Math.round(tdee + 300); protein = Math.round(w * 2.2);
+  } else if (primary === 'fat') {
+    calories = Math.round(tdee - 400); protein = Math.round(w * 2.4);
+  } else if (primary === 'strength') {
+    calories = Math.round(tdee + 100); protein = Math.round(w * 2.0);
+  } else if (primary === 'recomp') {
+    calories = Math.round(tdee); protein = Math.round(w * 2.4);
+  } else if (primary === 'endurance') {
+    calories = Math.round(tdee + 200); protein = Math.round(w * 1.8);
+  } else {
+    calories = Math.round(tdee); protein = Math.round(w * 1.8);
+  }
+  fat   = Math.round((calories * 0.28) / 9);
+  carbs = Math.round((calories - protein * 4 - fat * 9) / 4);
   return { calories, protein, carbs, fat };
 }
 
 // ─── PROGRAM GENERATOR ────────────────────────────────────────
 function generateProgram(user) {
-  const days = parseInt(user.days)||4;
-  const goal = user.goal||'fitness';
-  const exp  = user.experience||'intermediate';
+  const days  = parseInt(user.days)||4;
+  const goals = user.goals || (user.goal ? [user.goal] : ['fitness']);
+  const goal  = goals[0] || 'fitness';
+  const exp   = user.experience||'intermediate';
 
   const sets  = exp==='beginner' ? 3 : exp==='advanced' ? 5 : 4;
-  const hyper = goal==='muscle';
+  const hyper = goal==='muscle' || goal==='recomp' || (goals.includes('muscle') && goals.includes('fat'));
   const str   = goal==='strength';
+  const endur = goal==='endurance' || goals.includes('endurance');
 
-  const repsRange = str ? '3-5' : hyper ? '8-12' : '10-15';
-  const rest      = str ? 180   : hyper  ? 90     : 60;
+  const repsRange = str ? '3-5' : hyper ? '8-12' : endur ? '15-20' : '10-15';
+  const rest      = str ? 180   : hyper ? 90      : 60;
 
   const mk = (name, muscle, reps=repsRange, s=sets) => ({name, muscle, sets:s, reps, rest});
 
@@ -237,21 +293,25 @@ const OB_STEPS = [
     }
   },
   {
-    num:'03', title:'What\'s your primary goal?', sub:'This shapes your program, calorie targets & coaching.',
+    num:'03', title:'What are your goals?', sub:'Select 1–3 goals — shapes your program, calories & coaching.',
     type:'options',
     render: () => `
       <div class="ob-options">
-        ${[['muscle','💪','Build Muscle','Hypertrophy-focused training & surplus calories'],
-           ['fat','🔥','Lose Fat','Caloric deficit with muscle preservation'],
-           ['strength','⚡','Get Stronger','Strength-based programming & performance'],
+        ${[['muscle','💪','Build Muscle','Hypertrophy-focused training & calorie surplus'],
+           ['fat','🔥','Lose Fat','Caloric deficit with maximum muscle preservation'],
+           ['strength','⚡','Get Stronger','Strength programming & peak performance'],
+           ['recomp','⚖️','Body Recomposition','Build muscle & lose fat simultaneously'],
+           ['endurance','🌊','Build Endurance','Cardio capacity, stamina & aerobic fitness'],
            ['fitness','🏃','General Fitness','Balanced health, energy & wellbeing'],
            ['sport','🎯','Athletic Performance','Sport-specific conditioning & power'],
-        ].map(([v,ic,l,s])=>`<button class="ob-option" data-val="${v}"><span class="ob-icon">${ic}</span><span class="ob-label">${l}<span class="ob-sub2">${s}</span></span></button>`).join('')}
-      </div>`,
+        ].map(([v,ic,l,s])=>`<button class="ob-option ob-goal-opt" data-goal="${v}"><span class="ob-icon">${ic}</span><span class="ob-label">${l}<span class="ob-sub2">${s}</span></span></button>`).join('')}
+      </div>
+      <div style="font-size:12px;color:var(--t2);margin-top:10px;text-align:center">Select up to 3 goals</div>`,
     collect: () => {
-      const sel=document.querySelector('.ob-option.sel');
-      if(!sel){alert('Please select a goal.');return false;}
-      obData.goal=sel.dataset.val; return true;
+      const sels=[...document.querySelectorAll('.ob-goal-opt.sel')];
+      if(!sels.length){alert('Please select at least one goal.');return false;}
+      obData.goals=sels.map(b=>b.dataset.goal);
+      obData.goal=obData.goals[0]; return true;
     }
   },
   {
@@ -312,11 +372,17 @@ const OB_STEPS = [
     }
   },
   {
-    num:'06', title:'Financial picture', sub:'Track your budget & get smart money coaching.',
+    num:'06', title:'Financial picture', sub:'Set your currency & get smart money coaching.',
     type:'budget',
     render: () => `
+      <div class="ob-field" style="margin-bottom:20px">
+        <label>Your currency</label>
+        <select id="ob-currency" class="ob-select" style="width:100%;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--t1);font-size:15px">
+          ${CURRENCIES.map(c=>`<option value="${c.code}" ${c.code==='GBP'?'selected':''}>${c.symbol} ${c.name} (${c.code})</option>`).join('')}
+        </select>
+      </div>
       <div class="ob-options" style="margin-bottom:20px">
-        ${[['low','< £1,000 / mo'],['mid','£1,000 – £2,500'],['high','£2,500 – £4,000'],['vhigh','£4,000+'],['private','Prefer not to say']]
+        ${[['low','Low income'],['mid','Middle income'],['high','Higher income'],['vhigh','High earner'],['private','Prefer not to say']]
           .map(([v,l])=>`<button class="ob-option" data-val4="${v}"><span class="ob-label">${l}</span></button>`).join('')}
       </div>
       <div class="ob-field"><label>Main financial goal</label>
@@ -330,7 +396,8 @@ const OB_STEPS = [
     collect: () => {
       const b=document.querySelector('.ob-option.sel[data-val4]');
       obData.budgetBracket=b?b.dataset.val4:'private';
-      obData.finGoal=$('ob-fingoal').value; return true;
+      obData.finGoal=$('ob-fingoal').value;
+      obData.currency=$('ob-currency')?.value||'GBP'; return true;
     }
   },
 ];
@@ -359,6 +426,17 @@ function renderObStep() {
   // attach selection listeners
   document.querySelectorAll('.ob-option').forEach(btn => {
     btn.addEventListener('click', () => {
+      // Multi-select: goal buttons toggle independently (max 3)
+      if(btn.classList.contains('ob-goal-opt')) {
+        if(btn.classList.contains('sel')) {
+          btn.classList.remove('sel');
+        } else {
+          const selected = document.querySelectorAll('.ob-goal-opt.sel');
+          if(selected.length < 3) btn.classList.add('sel');
+        }
+        return;
+      }
+      // Single-select: clear group then select
       const grp = btn.dataset.val !== undefined ? '[data-val]' :
                   btn.dataset.val2!== undefined ? '[data-val2]':
                   btn.dataset.val3!== undefined ? '[data-val3]':
@@ -378,6 +456,8 @@ function obNext() {
 function obBack() { if(obStep>0){ obStep--; renderObStep(); } }
 
 function completeOnboarding() {
+  if(!obData.goals) obData.goals = obData.goal ? [obData.goal] : ['fitness'];
+  if(!obData.currency) obData.currency = 'GBP';
   const targets = calculateTargets(obData);
   S.user = { ...obData, targets, createdAt: todayStr() };
   S.program = generateProgram(obData);
@@ -398,16 +478,23 @@ function completeOnboarding() {
 function startApp() {
   $('app').classList.remove('hidden');
   updateSidebarUser();
-  showPage('dashboard');
+  // Support manifest shortcuts via URL hash e.g. index.html#training
+  const hash = location.hash.replace('#','');
+  const validPages = ['dashboard','training','meals','planner','calendar','notes','budget','progress','profile','running','supplements','more'];
+  showPage(validPages.includes(hash) ? hash : 'dashboard');
+}
+
+function formatGoals(user) {
+  const goals = user.goals || (user.goal ? [user.goal] : []);
+  return goals.map(g=>GOAL_LABELS[g]||g).join(' · ') || 'General Fitness';
 }
 
 function updateSidebarUser() {
   if(!S.user) return;
   const init = getInitials(S.user.name||'U');
-  const goal = GOAL_LABELS[S.user.goal]||'';
   $('sidebar-avatar').textContent = init;
   $('sidebar-name').textContent   = S.user.name;
-  $('sidebar-goal').textContent   = goal;
+  $('sidebar-goal').textContent   = formatGoals(S.user);
 }
 
 // ─── NAVIGATION ───────────────────────────────────────────────
@@ -564,13 +651,16 @@ function getCoachMessage() {
   if(lastW && daysBetween(lastW.date,todayStr())>=3) msgs.push(`It's been ${daysBetween(lastW.date,todayStr())} days since your last session. Your muscles are ready — get in the lab.`);
 
   const goalMsgs = {
-    muscle:   `Progressive overload is the only rule. Add weight or reps every session.`,
-    fat:      `Adherence beats perfection. Stay in your calorie target today.`,
-    strength: `Strength is earned in reps, not sets. Focus on quality over quantity.`,
-    fitness:  `Consistency compounds. Show up today and future you thanks you.`,
-    sport:    `Train with purpose. Every rep is preparation for your performance.`,
+    muscle:    `Progressive overload is the only rule. Add weight or reps every session.`,
+    fat:       `Adherence beats perfection. Stay in your calorie target today.`,
+    strength:  `Strength is earned in reps, not sets. Focus on quality over quantity.`,
+    fitness:   `Consistency compounds. Show up today and future you thanks you.`,
+    sport:     `Train with purpose. Every rep is preparation for your performance.`,
+    recomp:    `Recomp is a marathon — hit protein targets and trust the process.`,
+    endurance: `Cardio fitness compounds. Every session builds your aerobic engine.`,
   };
-  msgs.push(goalMsgs[user.goal]||'You are building something great. Stay disciplined.');
+  const goals = user.goals || (user.goal ? [user.goal] : ['fitness']);
+  msgs.push(goalMsgs[goals[0]]||'You are building something great. Stay disciplined.');
   return msgs[Math.floor(Math.random()*msgs.length)];
 }
 
@@ -702,7 +792,10 @@ function showTrainingTab(tab) {
 
 function renderProgram() {
   const prog = S.program;
-  if(!prog){ $('training-program').innerHTML='<div class="empty-state">No program generated. Please complete your profile.</div>'; return; }
+  if(!prog){
+    $('training-program').innerHTML=`<div class="empty-state"><div class="empty-state-icon">📋</div><h3>No program yet</h3><p>Generate a personalised plan based on your profile</p><button class="btn btn-blue" style="margin-top:16px" onclick="regenerateProgram()">Generate My Program</button></div>`;
+    return;
+  }
   const dow = ((new Date().getDay()-1+7)%7);
   $('training-program').innerHTML = `
     <div class="card" style="margin-bottom:20px">
@@ -719,6 +812,14 @@ function renderProgram() {
     </div>`;
 }
 
+function regenerateProgram() {
+  if(!S.user) return;
+  S.program = generateProgram(S.user);
+  save('program', S.program);
+  renderProgram();
+  if(currentPage==='dashboard') renderTodayWorkoutCard();
+}
+
 function renderWorkoutLog() {
   const logs = S.workouts.slice().reverse();
   $('training-log').innerHTML = logs.length ? logs.map(w=>`
@@ -726,7 +827,7 @@ function renderWorkoutLog() {
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
         <div>
           <div style="font-size:18px;font-weight:700">${w.name}</div>
-          <div style="font-size:13px;color:var(--t2)">${fmtDate(w.date)} · ${w.duration}min · ${w.totalSets} sets</div>
+          <div style="font-size:13px;color:var(--t2)">${fmtDate(w.date)} · ${w.duration}min · ${w.totalSets??(w.exercises||[]).reduce((a,e)=>a+(e.sets?.length||0),0)} sets</div>
         </div>
         <button class="btn btn-danger btn-sm" onclick="deleteWorkout('${w.id}')">Delete</button>
       </div>
@@ -1049,32 +1150,126 @@ function renderMeals() {
   : '<div class="empty-state" style="padding:30px"><div class="empty-state-icon">🥗</div><h3>Nothing logged yet</h3><p>Tap "+ Log Food" to track your meals</p></div>';
 }
 
+let _mealState = { food: null };
+
 function openAddMeal() {
+  _mealState = { food: null };
   openModal(`
     <div class="modal-header"><div class="modal-title">Log Food</div><button class="modal-close" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Search food</label>
-        <input class="form-input" id="food-search" placeholder="e.g. Chicken, Oats…" oninput="searchFood()">
-        <div id="food-results"></div>
+      <div class="tabs" style="margin-bottom:14px">
+        <button class="tab active" id="meal-tab-search" onclick="switchMealTab('search')">Search</button>
+        <button class="tab" id="meal-tab-custom" onclick="switchMealTab('custom')">Custom</button>
       </div>
-      <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--t2)">Or add custom</div>
+
+      <div id="meal-panel-search">
+        <div class="form-group">
+          <input class="form-input" id="food-search" placeholder="e.g. Chicken Breast, Oats…" oninput="searchFood()">
+          <div id="food-results" style="margin-top:6px"></div>
+        </div>
+        <div id="food-amount-section" class="hidden" style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:10px" id="food-selected-name">—</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Amount</label>
+              <input class="form-input" id="food-amount" type="number" step="any" placeholder="100" oninput="updateFoodPreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unit</label>
+              <div class="form-input" id="food-unit-display" style="display:flex;align-items:center;color:var(--t2)">–</div>
+            </div>
+          </div>
+          <div id="food-preview" style="background:var(--bg3);border-radius:var(--r-sm);padding:10px 14px;font-size:13px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center">
+            <div><div id="prev-cal" style="font-weight:700;color:var(--blue3)">–</div><div style="color:var(--t2);font-size:11px">kcal</div></div>
+            <div><div id="prev-p" style="font-weight:700;color:var(--cyan)">–</div><div style="color:var(--t2);font-size:11px">protein</div></div>
+            <div><div id="prev-c" style="font-weight:700;color:var(--gold)">–</div><div style="color:var(--t2);font-size:11px">carbs</div></div>
+            <div><div id="prev-f" style="font-weight:700;color:var(--red)">–</div><div style="color:var(--t2);font-size:11px">fat</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="meal-panel-custom" class="hidden">
         <div class="form-row">
           <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="custom-food-name" placeholder="Food name"></div>
-          <div class="form-group"><label class="form-label">Calories</label><input class="form-input" id="custom-kcal" type="number" placeholder="0"></div>
+          <div class="form-group"><label class="form-label">Calories</label><input class="form-input" id="custom-kcal" type="number" placeholder="0" oninput="updateCustomPreview()"></div>
         </div>
         <div class="form-row-3">
-          <div class="form-group"><label class="form-label">Protein (g)</label><input class="form-input" id="custom-p" type="number" placeholder="0"></div>
-          <div class="form-group"><label class="form-label">Carbs (g)</label><input class="form-input" id="custom-c" type="number" placeholder="0"></div>
-          <div class="form-group"><label class="form-label">Fat (g)</label><input class="form-input" id="custom-f" type="number" placeholder="0"></div>
+          <div class="form-group"><label class="form-label">Protein (g)</label><input class="form-input" id="custom-p" type="number" placeholder="0" oninput="updateCustomPreview()"></div>
+          <div class="form-group"><label class="form-label">Carbs (g)</label><input class="form-input" id="custom-c" type="number" placeholder="0" oninput="updateCustomPreview()"></div>
+          <div class="form-group"><label class="form-label">Fat (g)</label><input class="form-input" id="custom-f" type="number" placeholder="0" oninput="updateCustomPreview()"></div>
+        </div>
+        <div id="custom-preview" style="background:var(--bg3);border-radius:var(--r-sm);padding:10px 14px;font-size:13px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;margin-top:4px">
+          <div><div id="cprev-cal" style="font-weight:700;color:var(--blue3)">0</div><div style="color:var(--t2);font-size:11px">kcal</div></div>
+          <div><div id="cprev-p" style="font-weight:700;color:var(--cyan)">0g</div><div style="color:var(--t2);font-size:11px">protein</div></div>
+          <div><div id="cprev-c" style="font-weight:700;color:var(--gold)">0g</div><div style="color:var(--t2);font-size:11px">carbs</div></div>
+          <div><div id="cprev-f" style="font-weight:700;color:var(--red)">0g</div><div style="color:var(--t2);font-size:11px">fat</div></div>
         </div>
       </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-blue" onclick="addCustomMeal()">Log Food</button>
+      <button class="btn btn-blue" onclick="logSelectedFood()">Log Food</button>
     </div>`);
+}
+
+function switchMealTab(tab) {
+  ['search','custom'].forEach(t=>{
+    $('meal-tab-'+t)?.classList.toggle('active', t===tab);
+    $('meal-panel-'+t)?.classList.toggle('hidden', t!==tab);
+  });
+}
+
+function updateFoodPreview() {
+  const f = _mealState.food; if(!f) return;
+  const amt = parseFloat($('food-amount')?.value) || f.base;
+  const ratio = amt / f.base;
+  const c = Math.round(f.cal * ratio);
+  const p = +(f.p * ratio).toFixed(1);
+  const cb = +(f.c * ratio).toFixed(1);
+  const ft = +(f.f * ratio).toFixed(1);
+  if($('prev-cal')) { $('prev-cal').textContent=c; $('prev-p').textContent=p+'g'; $('prev-c').textContent=cb+'g'; $('prev-f').textContent=ft+'g'; }
+}
+
+function updateCustomPreview() {
+  if($('cprev-cal')) {
+    $('cprev-cal').textContent = $('custom-kcal')?.value || '0';
+    $('cprev-p').textContent   = ($('custom-p')?.value||'0')+'g';
+    $('cprev-c').textContent   = ($('custom-c')?.value||'0')+'g';
+    $('cprev-f').textContent   = ($('custom-f')?.value||'0')+'g';
+  }
+}
+
+function logSelectedFood() {
+  // Check which tab is active
+  const isSearch = !$('meal-panel-search')?.classList.contains('hidden');
+  if(isSearch && _mealState.food) {
+    const f = _mealState.food;
+    const amt = parseFloat($('food-amount')?.value) || f.base;
+    const ratio = amt / f.base;
+    const unitLabel = `${amt}${f.unit}`;
+    S.meals.push({
+      id:uid(), date:todayStr(),
+      name:`${f.n} (${unitLabel})`,
+      cal: Math.round(f.cal * ratio),
+      p:   Math.round(f.p * ratio * 10) / 10,
+      c:   Math.round(f.c * ratio * 10) / 10,
+      f:   Math.round(f.f * ratio * 10) / 10,
+    });
+  } else {
+    const name = $('custom-food-name')?.value || 'Food';
+    const cal  = parseFloat($('custom-kcal')?.value)||0;
+    if(!name || !cal) { alert('Enter a name and calories.'); return; }
+    S.meals.push({
+      id:uid(), date:todayStr(), name,
+      cal, p:parseFloat($('custom-p')?.value)||0,
+      c:parseFloat($('custom-c')?.value)||0,
+      f:parseFloat($('custom-f')?.value)||0,
+    });
+  }
+  save('meals', S.meals);
+  closeModal();
+  renderMeals();
+  if(currentPage==='dashboard') renderDashboard();
 }
 
 function searchFood() {
@@ -1083,32 +1278,22 @@ function searchFood() {
   $('food-results').innerHTML = matches.length ? `<div class="food-search-results">
     ${matches.map(f=>`<div class="food-result-item" onclick="selectFood('${f.n.replace(/'/g,"\\'")}')">
       <span>${f.n}</span>
-      <span class="food-result-macros">${f.cal}kcal · P:${f.p}g</span>
+      <span class="food-result-macros">per ${f.base}${f.unit} · ${f.cal}kcal · P:${f.p}g</span>
     </div>`).join('')}</div>` : '';
 }
 
 function selectFood(name) {
   const f = FOODS.find(x=>x.n===name); if(!f) return;
-  $('custom-food-name').value=f.n; $('custom-kcal').value=f.cal;
-  $('custom-p').value=f.p; $('custom-c').value=f.c; $('custom-f').value=f.f;
-  $('food-results').innerHTML=''; $('food-search').value='';
+  _mealState.food = f;
+  $('food-search').value = '';
+  $('food-results').innerHTML = '';
+  $('food-amount-section')?.classList.remove('hidden');
+  if($('food-selected-name')) $('food-selected-name').textContent = f.n;
+  if($('food-unit-display')) $('food-unit-display').textContent = f.unit;
+  if($('food-amount')) { $('food-amount').value = f.base; $('food-amount').placeholder = f.base; }
+  updateFoodPreview();
 }
 
-function addCustomMeal() {
-  const entry = {
-    id:uid(), date:todayStr(),
-    name: $('custom-food-name')?.value||'Food',
-    cal:  parseFloat($('custom-kcal')?.value)||0,
-    p:    parseFloat($('custom-p')?.value)||0,
-    c:    parseFloat($('custom-c')?.value)||0,
-    f:    parseFloat($('custom-f')?.value)||0,
-  };
-  S.meals.push(entry);
-  save('meals', S.meals);
-  closeModal();
-  renderMeals();
-  if(currentPage==='dashboard') renderDashboard();
-}
 
 function deleteMeal(id) {
   S.meals = S.meals.filter(m=>m.id!==id);
@@ -1274,7 +1459,7 @@ function renderCalEvents() {
   const workouts = S.workouts.filter(w=>w.date===date);
   const meals = S.meals.filter(m=>m.date===date);
   let html = '';
-  workouts.forEach(w=>{ html+=`<div class="event-item"><div class="cal-dot workout" style="width:10px;height:10px"></div><div class="event-info"><div class="event-title">💪 ${w.name}</div><div class="event-time">${w.duration}min · ${w.totalSets} sets</div></div></div>`; });
+  workouts.forEach(w=>{ const sets=w.totalSets??(w.exercises||[]).reduce((a,e)=>a+(e.sets?.length||0),0); html+=`<div class="event-item"><div class="cal-dot workout" style="width:10px;height:10px"></div><div class="event-info"><div class="event-title">💪 ${w.name}</div><div class="event-time">${w.duration}min · ${sets} sets</div></div></div>`; });
   if(meals.length){ html+=`<div class="event-item"><div class="cal-dot meal" style="width:10px;height:10px"></div><div class="event-info"><div class="event-title">🥗 ${meals.length} meals logged</div><div class="event-time">${meals.reduce((a,m)=>a+m.cal,0)} kcal</div></div></div>`; }
   evs.forEach(e=>{ html+=`<div class="event-item"><div class="event-dot" style="background:var(--gold)"></div><div class="event-info"><div class="event-title">${e.title}</div><div class="event-time">${e.time||'All day'}${e.note?' · '+e.note:''}</div></div><button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px" onclick="deleteEvent('${e.id}')">✕</button></div>`; });
   $('cal-events-list').innerHTML = html || '<div style="color:var(--t2);padding:20px 0;font-size:14px">No events on this day. Click "+ Add Event" to schedule something.</div>';
@@ -1464,7 +1649,7 @@ function openAddBudget(type) {
     <div class="modal-body">
       <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="b-desc" placeholder="${type==='income'?'Salary, freelance…':'Gym, groceries…'}"></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Amount (£)</label><input class="form-input" id="b-amount" type="number" placeholder="0.00" step="0.01"></div>
+        <div class="form-group"><label class="form-label">Amount (${currencySymbol()})</label><input class="form-input" id="b-amount" type="number" placeholder="0.00" step="0.01"></div>
         <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="b-date" type="date" value="${todayStr()}"></div>
       </div>
       <div class="form-group"><label class="form-label">Category</label>
@@ -1496,7 +1681,7 @@ function deleteBudgetEntry(id) {
 
 // ─── PROGRESS ─────────────────────────────────────────────────
 function renderProgress() {
-  const logs = S.weightLog.slice(-30);
+  const logs = S.weightLog.slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(-30);
   const latest = logs.slice(-1)[0];
   const prev   = logs.length>1?logs[logs.length-2]:null;
   $('current-weight').textContent = latest?latest.kg+'kg':'–';
@@ -1543,16 +1728,16 @@ function drawWeightChart(logs) {
   ctx.clearRect(0,0,W,H);
 
   // Grid
-  ctx.strokeStyle='rgba(80,100,255,0.1)'; ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(0,122,193,0.12)'; ctx.lineWidth=1;
   for(let i=0;i<=4;i++){
     const y=pad+(H-pad*2)*(1-i/4);
     ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke();
-    ctx.fillStyle='rgba(136,153,204,0.6)'; ctx.font='10px system-ui'; ctx.textAlign='right';
+    ctx.fillStyle='rgba(123,168,196,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='right';
     ctx.fillText((minV+(maxV-minV)*i/4).toFixed(1), pad-4, y+4);
   }
 
   if(logs.length<2){
-    ctx.fillStyle='rgba(91,116,255,0.8)'; ctx.font='13px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,122,193,0.8)'; ctx.font='13px system-ui'; ctx.textAlign='center';
     ctx.fillText('Log more weights to see your trend', W/2, H/2); return;
   }
 
@@ -1562,8 +1747,8 @@ function drawWeightChart(logs) {
 
   // Gradient fill
   const grad=ctx.createLinearGradient(0,pad,0,H-pad);
-  grad.addColorStop(0,'rgba(39,56,200,0.3)');
-  grad.addColorStop(1,'rgba(39,56,200,0)');
+  grad.addColorStop(0,'rgba(0,122,193,0.30)');
+  grad.addColorStop(1,'rgba(0,122,193,0)');
   ctx.beginPath(); ctx.moveTo(toX(0),toY(vals[0]));
   vals.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
   ctx.lineTo(toX(vals.length-1),H-pad); ctx.lineTo(toX(0),H-pad); ctx.closePath();
@@ -1572,13 +1757,13 @@ function drawWeightChart(logs) {
   // Line
   ctx.beginPath(); ctx.moveTo(toX(0),toY(vals[0]));
   vals.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
-  ctx.strokeStyle='#4a60f0'; ctx.lineWidth=2; ctx.stroke();
+  ctx.strokeStyle='#007AC1'; ctx.lineWidth=2; ctx.stroke();
 
   // Dots
   vals.forEach((v,i)=>{
     ctx.beginPath(); ctx.arc(toX(i),toY(v),4,0,Math.PI*2);
-    ctx.fillStyle='#4a60f0'; ctx.fill();
-    ctx.strokeStyle='#07071a'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#007AC1'; ctx.fill();
+    ctx.strokeStyle='#060d16'; ctx.lineWidth=2; ctx.stroke();
   });
 }
 
@@ -1607,10 +1792,10 @@ function drawVolumeChart() {
     const bh=Math.max((w.sets/maxV)*(H-pad*2),2);
     const y=H-pad-bh;
     const grad=ctx.createLinearGradient(0,y,0,H-pad);
-    grad.addColorStop(0,'#4a60f0'); grad.addColorStop(1,'rgba(39,56,200,0.2)');
+    grad.addColorStop(0,'#007AC1'); grad.addColorStop(1,'rgba(0,44,98,0.25)');
     ctx.fillStyle=grad;
     ctx.beginPath(); ctx.rect(x,y,bw,bh); ctx.fill();
-    ctx.fillStyle='rgba(136,153,204,0.6)'; ctx.font='10px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(123,168,196,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='center';
     ctx.fillText(w.label, x+bw/2, H-8);
     if(w.sets) { ctx.fillStyle='var(--t1)'; ctx.fillText(w.sets, x+bw/2, y-4); }
   });
@@ -1698,23 +1883,26 @@ function renderProfile() {
   const u=S.user; if(!u) return;
   $('profile-avatar-big').textContent=getInitials(u.name||'U');
   $('profile-name').textContent=u.name||'';
-  $('profile-goal-label').textContent=GOAL_LABELS[u.goal]||'';
+  $('profile-goal-label').textContent=formatGoals(u);
   $('profile-stats').innerHTML=`
     <div class="profile-stat"><div class="profile-stat-val">${S.workouts.length}</div><div class="profile-stat-label">Workouts</div></div>
     <div class="profile-stat"><div class="profile-stat-val">${S.weightLog.length}</div><div class="profile-stat-label">Check-ins</div></div>
     <div class="profile-stat"><div class="profile-stat-val">${S.prs.length}</div><div class="profile-stat-label">PRs</div></div>`;
+  const currencyName = (CURRENCIES.find(c=>c.code===(u.currency||'GBP'))||CURRENCIES[0]).name;
   $('profile-info-rows').innerHTML=[
-    {label:'Age',    val:u.age+' years'},
-    {label:'Height', val:u.height+'cm'},
-    {label:'Weight', val:u.weight+'kg'},
-    {label:'Sex',    val:u.sex||'–'},
-    {label:'Diet',   val:u.diet||'Standard'},
+    {label:'Age',      val:u.age+' years'},
+    {label:'Height',   val:u.height+'cm'},
+    {label:'Weight',   val:u.weight+'kg'},
+    {label:'Sex',      val:u.sex||'–'},
+    {label:'Diet',     val:u.diet||'Standard'},
     {label:'Lifestyle',val:u.workType||'–'},
+    {label:'Currency', val:`${currencySymbol()} ${currencyName}`},
   ].map(r=>`<div class="settings-row"><span class="settings-row-label">${r.label}</span><span class="settings-row-val">${r.val}</span></div>`).join('');
   $('profile-training-rows').innerHTML=[
-    {label:'Program', val:S.program?.name||'–'},
-    {label:'Days/Week',val:u.days+' days'},
-    {label:'Experience',val:u.experience||'–'},
+    {label:'Goals',         val:formatGoals(u)},
+    {label:'Program',       val:S.program?.name||'–'},
+    {label:'Days/Week',     val:u.days+' days'},
+    {label:'Experience',    val:u.experience||'–'},
     {label:'Session Length',val:(u.duration||60)+'min'},
   ].map(r=>`<div class="settings-row"><span class="settings-row-label">${r.label}</span><span class="settings-row-val">${r.val}</span></div>`).join('');
   const t=u.targets||{};
@@ -1739,6 +1927,12 @@ function openEditProfile() {
         <div class="form-group"><label class="form-label">Height (cm)</label><input class="form-input" id="ep-height" type="number" value="${u.height||''}"></div>
         <div class="form-group"><label class="form-label">Weight (kg)</label><input class="form-input" id="ep-weight" type="number" step="0.1" value="${u.weight||''}"></div>
       </div>
+      <div class="form-group">
+        <label class="form-label">Currency</label>
+        <select class="form-select" id="ep-currency">
+          ${CURRENCIES.map(c=>`<option value="${c.code}" ${(u.currency||'GBP')===c.code?'selected':''}>${c.symbol} ${c.name} (${c.code})</option>`).join('')}
+        </select>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
@@ -1752,6 +1946,7 @@ function saveProfile() {
   u.age=$('ep-age')?.value||u.age;
   u.height=$('ep-height')?.value||u.height;
   u.weight=$('ep-weight')?.value||u.weight;
+  u.currency=$('ep-currency')?.value||u.currency||'GBP';
   u.targets=calculateTargets(u);
   save('user',S.user); updateSidebarUser(); closeModal(); renderProfile();
 }
@@ -2068,6 +2263,9 @@ function closeModal() {
   $('modal').classList.add('hidden');
   $('modal-overlay').classList.add('hidden');
 }
+
+// Close modal on Escape key
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
 // ─── INIT ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
