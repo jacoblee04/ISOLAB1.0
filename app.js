@@ -2250,6 +2250,9 @@ function closeModal() {
   $('modal-overlay').classList.add('hidden');
 }
 
+// Close modal on Escape key
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
 // ─── INIT ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(()=>{
