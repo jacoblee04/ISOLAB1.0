@@ -3,46 +3,46 @@
    ============================================ */
 
 :root {
-  /* ── Backgrounds (warm espresso tones) */
-  --bg:      #0e0c0a;
-  --bg2:     #161310;
-  --bg3:     #1e1a16;
-  --card:    #231f1b;
-  --card2:   #2a2520;
+  /* ── Backgrounds (OKC Thunder deep navy) */
+  --bg:      #060d16;
+  --bg2:     #0a1520;
+  --bg3:     #0e1e2e;
+  --card:    #122030;
+  --card2:   #183040;
 
   /* ── Borders */
-  --border:  rgba(190,158,108,0.18);
-  --border2: rgba(190,158,108,0.38);
+  --border:  rgba(0,122,193,0.20);
+  --border2: rgba(0,122,193,0.42);
 
-  /* ── Gold / Amber accent (primary) */
-  --gold-dk: #8a6520;
-  --gold:    #c4963a;
-  --gold2:   #ddb96a;
+  /* ── Thunder Blue (primary accent) */
+  --gold-dk: #005a8e;
+  --gold:    #007AC1;
+  --gold2:   #4db4e6;
 
   /* ── Accent shades */
-  --sage:    #6e9e82;
-  --stone:   #a0876e;
-  --mauve:   #8e7fa8;
-  --rose:    #b87474;
-  --amber:   #c4793a;
+  --sage:    #2a9d6f;
+  --stone:   #4a7a9b;
+  --mauve:   #7b68c8;
+  --rose:    #EF3B24;
+  --amber:   #e06820;
 
   /* ── Legacy aliases (used extensively in JS-generated HTML) */
-  --blue:    #8a6520;
-  --blue2:   #c4963a;
-  --blue3:   #ddb96a;
-  --cyan:    #8e7fa8;
-  --green:   #6e9e82;
-  --red:     #b87474;
-  --orange:  #c4793a;
-  --purple:  #9b8aaa;
+  --blue:    #005a8e;
+  --blue2:   #007AC1;
+  --blue3:   #4db4e6;
+  --cyan:    #7b68c8;
+  --green:   #2a9d6f;
+  --red:     #EF3B24;
+  --orange:  #e06820;
+  --purple:  #7b68c8;
 
   /* ── Glow */
-  --glow:    rgba(196,150,58,0.20);
+  --glow:    rgba(0,122,193,0.22);
 
   /* ── Text */
-  --t1:      #f2ebe1;
-  --t2:      #9e8f7e;
-  --t3:      #5e5248;
+  --t1:      #e8f4fc;
+  --t2:      #7ba8c4;
+  --t3:      #3a5e7a;
 
   --font:    -apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif;
   --r:       16px;
@@ -103,7 +103,7 @@ body {
 
 @keyframes pulse-ring {
   0%,100% { box-shadow: 0 0 30px var(--glow); }
-  50%      { box-shadow: 0 0 60px var(--glow), 0 0 90px rgba(196,150,58,0.08); }
+  50%      { box-shadow: 0 0 60px var(--glow), 0 0 90px rgba(0,122,193,0.08); }
 }
 @keyframes fade-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 @keyframes slide-up { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
@@ -134,10 +134,10 @@ body {
   display: flex; align-items: center; gap: 12px;
 }
 .ob-option:hover {
-  border-color: var(--border2); background: rgba(196,150,58,0.07);
+  border-color: var(--border2); background: rgba(0,122,193,0.07);
 }
 .ob-option.sel {
-  border-color: var(--gold); background: rgba(196,150,58,0.12);
+  border-color: var(--gold); background: rgba(0,122,193,0.12);
   box-shadow: 0 0 0 1px var(--gold-dk), 0 4px 20px var(--glow);
   color: var(--t1);
 }
@@ -206,9 +206,9 @@ body {
   margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left;
 }
 .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
-.nav-item:hover { color: var(--t1); background: rgba(196,150,58,0.06); }
+.nav-item:hover { color: var(--t1); background: rgba(0,122,193,0.06); }
 .nav-item.active {
-  color: var(--t1); background: rgba(196,150,58,0.12);
+  color: var(--t1); background: rgba(0,122,193,0.12);
   box-shadow: inset 3px 0 0 var(--gold);
 }
 .nav-section-label {
@@ -225,7 +225,7 @@ body {
   background: var(--bg3); cursor: pointer;
   transition: background var(--trans);
 }
-.user-pill:hover { background: rgba(196,150,58,0.08); }
+.user-pill:hover { background: rgba(0,122,193,0.08); }
 .user-avatar {
   width: 32px; height: 32px; border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-dk), var(--stone));
@@ -241,7 +241,7 @@ body {
 #bnav {
   display: none;
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
-  background: rgba(14,12,10,0.96);
+  background: rgba(6,13,22,0.96);
   backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
   height: var(--bnav);
@@ -329,7 +329,7 @@ body {
   background: transparent; border: 1.5px solid var(--border2);
   color: var(--gold2);
 }
-.btn-outline:hover { background: rgba(196,150,58,0.08); }
+.btn-outline:hover { background: rgba(0,122,193,0.08); }
 .btn-danger { background: rgba(184,116,116,0.12); border: 1.5px solid rgba(184,116,116,0.28); color: var(--rose); }
 .btn-danger:hover { background: rgba(184,116,116,0.22); }
 .btn-success { background: rgba(110,158,130,0.12); border: 1.5px solid rgba(110,158,130,0.28); color: var(--sage); }
@@ -354,7 +354,7 @@ body {
 }
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none; border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(196,150,58,0.12);
+  box-shadow: 0 0 0 3px rgba(0,122,193,0.12);
 }
 .form-input::placeholder, .form-textarea::placeholder { color: var(--t3); }
 .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
@@ -368,9 +368,9 @@ body {
   font-size: 12px; font-weight: 600;
   background: var(--bg3); border: 1px solid var(--border); color: var(--t2);
 }
-.chip-blue  { background: rgba(196,150,58,0.12); border-color: rgba(196,150,58,0.3); color: var(--gold2); }
+.chip-blue  { background: rgba(0,122,193,0.12); border-color: rgba(0,122,193,0.30); color: var(--gold2); }
 .chip-green { background: rgba(110,158,130,0.12); border-color: rgba(110,158,130,0.3); color: var(--sage); }
-.chip-gold  { background: rgba(196,150,58,0.12); border-color: rgba(196,150,58,0.3); color: var(--gold); }
+.chip-gold  { background: rgba(0,122,193,0.12); border-color: rgba(0,122,193,0.30); color: var(--gold); }
 .chip-red   { background: rgba(184,116,116,0.12); border-color: rgba(184,116,116,0.3); color: var(--rose); }
 
 /* ─── PROGRESS BARS ───────────────────────── */
@@ -398,14 +398,14 @@ body {
 .date-disp { font-size: 15px; color: var(--t2); margin-top: 4px; }
 
 .coach-card {
-  background: linear-gradient(135deg, rgba(196,150,58,0.10), rgba(160,135,110,0.05));
-  border: 1px solid rgba(196,150,58,0.22); border-radius: var(--r); padding: 20px;
+  background: linear-gradient(135deg, rgba(0,122,193,0.10), rgba(0,44,98,0.12));
+  border: 1px solid rgba(0,122,193,0.22); border-radius: var(--r); padding: 20px;
   position: relative; overflow: hidden;
 }
 .coach-card::before {
   content: ''; position: absolute; top: -40px; right: -40px;
   width: 120px; height: 120px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(196,150,58,0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(0,122,193,0.08), transparent 70%);
 }
 .coach-label { font-size: 11px; letter-spacing: 2px; color: var(--gold); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
 .coach-msg { font-size: 15px; line-height: 1.6; color: var(--t1); }
@@ -431,7 +431,7 @@ body {
 .habit-streak { font-size: 12px; color: var(--gold); font-weight: 700; }
 
 .today-workout-card {
-  background: linear-gradient(135deg, rgba(196,150,58,0.10), var(--card));
+  background: linear-gradient(135deg, rgba(0,122,193,0.10), var(--card));
   border: 1px solid var(--border2); border-radius: var(--r); padding: 20px;
 }
 .workout-name { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
@@ -519,7 +519,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .food-result-item:last-child { border-bottom: none; }
-.food-result-item:hover { background: rgba(196,150,58,0.07); }
+.food-result-item:hover { background: rgba(0,122,193,0.07); }
 .food-result-macros { font-size: 12px; color: var(--t2); }
 
 /* ─── CALENDAR ────────────────────────────── */
@@ -534,11 +534,11 @@ body {
   min-height: 44px;
 }
 .cal-day:hover { background: var(--bg3); border-color: var(--border); }
-.cal-day.today { background: rgba(196,150,58,0.12); border-color: var(--gold); }
+.cal-day.today { background: rgba(0,122,193,0.12); border-color: var(--gold); }
 .cal-day.other-month { opacity: 0.3; }
 .cal-day-num { font-size: 14px; font-weight: 600; }
 .cal-day.today .cal-day-num { color: var(--gold2); }
-.cal-day.cal-day-sel { background: rgba(196,150,58,0.18); border-color: var(--gold); }
+.cal-day.cal-day-sel { background: rgba(0,122,193,0.18); border-color: var(--gold); }
 .cal-dots { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; }
 .cal-dot.workout { background: var(--gold); }
@@ -567,7 +567,7 @@ body {
   transition: all var(--trans); position: relative;
 }
 .note-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.note-card.pinned { border-color: rgba(196,150,58,0.35); }
+.note-card.pinned { border-color: rgba(0,122,193,0.35); }
 .note-pin { position: absolute; top: 14px; right: 14px; color: var(--gold); }
 .note-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
 .note-preview { font-size: 13px; color: var(--t2); line-height: 1.6; max-height: 80px; overflow: hidden; }
@@ -599,8 +599,8 @@ body {
 .bcat-amt { font-size: 13px; color: var(--t2); width: 60px; text-align: right; }
 
 .budget-advice-card {
-  background: linear-gradient(135deg, rgba(196,150,58,0.07), var(--card));
-  border: 1px solid rgba(196,150,58,0.20); border-radius: var(--r); padding: 18px;
+  background: linear-gradient(135deg, rgba(0,122,193,0.07), var(--card));
+  border: 1px solid rgba(0,122,193,0.22); border-radius: var(--r); padding: 18px;
 }
 .advice-label { font-size: 11px; letter-spacing: 2px; color: var(--gold); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
 .advice-text { font-size: 14px; line-height: 1.7; color: var(--t1); }
@@ -610,11 +610,11 @@ body {
 .week-label { font-size: 18px; font-weight: 700; }
 .week-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 20px; }
 .week-day-col { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 12px; min-height: 120px; }
-.week-day-col.today { border-color: var(--gold); background: rgba(196,150,58,0.07); }
+.week-day-col.today { border-color: var(--gold); background: rgba(0,122,193,0.07); }
 .wday-name { font-size: 11px; color: var(--t2); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 .wday-num { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
 .wday-task {
-  background: rgba(196,150,58,0.10); border-radius: 6px; padding: 5px 8px;
+  background: rgba(0,122,193,0.10); border-radius: 6px; padding: 5px 8px;
   font-size: 12px; margin-bottom: 4px; cursor: pointer; display: flex;
   align-items: center; gap: 6px;
 }
@@ -737,8 +737,8 @@ body {
 .streak-badge {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 12px; border-radius: 20px;
-  background: linear-gradient(135deg, rgba(196,150,58,0.14), rgba(196,150,58,0.05));
-  border: 1px solid rgba(196,150,58,0.28);
+  background: linear-gradient(135deg, rgba(0,122,193,0.14), rgba(196,150,58,0.05));
+  border: 1px solid rgba(0,122,193,0.28);
   font-size: 13px; font-weight: 700; color: var(--gold);
 }
 
@@ -783,8 +783,8 @@ body {
 
 /* ─── DAILY SCORE CARD ────────────────────── */
 .daily-score-card {
-  background: linear-gradient(135deg, rgba(196,150,58,0.10), rgba(160,135,110,0.04));
-  border: 1px solid rgba(196,150,58,0.22); border-radius: var(--r); padding: 20px;
+  background: linear-gradient(135deg, rgba(0,122,193,0.10), rgba(0,44,98,0.10));
+  border: 1px solid rgba(0,122,193,0.22); border-radius: var(--r); padding: 20px;
   display: flex; align-items: center; gap: 24px; margin-bottom: 20px;
 }
 .score-ring-wrap { position: relative; flex-shrink: 0; }
@@ -889,7 +889,7 @@ body {
 
 /* ─── ACTIVE WORKOUT BANNER ───────────────── */
 .workout-active-banner {
-  background: linear-gradient(135deg, rgba(196,150,58,0.12), rgba(160,135,110,0.04));
+  background: linear-gradient(135deg, rgba(0,122,193,0.12), rgba(0,44,98,0.10));
   border-bottom: 1px solid var(--border2);
   padding: 10px 28px; display: flex; align-items: center; gap: 16px;
   font-size: 14px;
@@ -900,9 +900,9 @@ body {
 /* ─── HABIT HEATMAP ───────────────────────── */
 .habit-heatmap { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 12px; }
 .hmap-cell { width: 12px; height: 12px; border-radius: 3px; background: var(--bg3); transition: background var(--trans); }
-.hmap-cell.l1 { background: rgba(196,150,58,0.20); }
-.hmap-cell.l2 { background: rgba(196,150,58,0.42); }
-.hmap-cell.l3 { background: rgba(196,150,58,0.65); }
+.hmap-cell.l1 { background: rgba(0,122,193,0.22); }
+.hmap-cell.l2 { background: rgba(0,122,193,0.42); }
+.hmap-cell.l3 { background: rgba(0,122,193,0.65); }
 .hmap-cell.l4 { background: var(--gold); box-shadow: 0 0 4px var(--glow); }
 
 @media (max-width: 768px) {

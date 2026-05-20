@@ -1725,16 +1725,16 @@ function drawWeightChart(logs) {
   ctx.clearRect(0,0,W,H);
 
   // Grid
-  ctx.strokeStyle='rgba(190,158,108,0.10)'; ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(0,122,193,0.12)'; ctx.lineWidth=1;
   for(let i=0;i<=4;i++){
     const y=pad+(H-pad*2)*(1-i/4);
     ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke();
-    ctx.fillStyle='rgba(158,143,126,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='right';
+    ctx.fillStyle='rgba(123,168,196,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='right';
     ctx.fillText((minV+(maxV-minV)*i/4).toFixed(1), pad-4, y+4);
   }
 
   if(logs.length<2){
-    ctx.fillStyle='rgba(196,150,58,0.8)'; ctx.font='13px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,122,193,0.8)'; ctx.font='13px system-ui'; ctx.textAlign='center';
     ctx.fillText('Log more weights to see your trend', W/2, H/2); return;
   }
 
@@ -1744,8 +1744,8 @@ function drawWeightChart(logs) {
 
   // Gradient fill
   const grad=ctx.createLinearGradient(0,pad,0,H-pad);
-  grad.addColorStop(0,'rgba(196,150,58,0.28)');
-  grad.addColorStop(1,'rgba(196,150,58,0)');
+  grad.addColorStop(0,'rgba(0,122,193,0.30)');
+  grad.addColorStop(1,'rgba(0,122,193,0)');
   ctx.beginPath(); ctx.moveTo(toX(0),toY(vals[0]));
   vals.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
   ctx.lineTo(toX(vals.length-1),H-pad); ctx.lineTo(toX(0),H-pad); ctx.closePath();
@@ -1754,13 +1754,13 @@ function drawWeightChart(logs) {
   // Line
   ctx.beginPath(); ctx.moveTo(toX(0),toY(vals[0]));
   vals.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
-  ctx.strokeStyle='#c4963a'; ctx.lineWidth=2; ctx.stroke();
+  ctx.strokeStyle='#007AC1'; ctx.lineWidth=2; ctx.stroke();
 
   // Dots
   vals.forEach((v,i)=>{
     ctx.beginPath(); ctx.arc(toX(i),toY(v),4,0,Math.PI*2);
-    ctx.fillStyle='#c4963a'; ctx.fill();
-    ctx.strokeStyle='#0e0c0a'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#007AC1'; ctx.fill();
+    ctx.strokeStyle='#060d16'; ctx.lineWidth=2; ctx.stroke();
   });
 }
 
@@ -1789,10 +1789,10 @@ function drawVolumeChart() {
     const bh=Math.max((w.sets/maxV)*(H-pad*2),2);
     const y=H-pad-bh;
     const grad=ctx.createLinearGradient(0,y,0,H-pad);
-    grad.addColorStop(0,'#c4963a'); grad.addColorStop(1,'rgba(138,101,32,0.2)');
+    grad.addColorStop(0,'#007AC1'); grad.addColorStop(1,'rgba(0,44,98,0.25)');
     ctx.fillStyle=grad;
     ctx.beginPath(); ctx.rect(x,y,bw,bh); ctx.fill();
-    ctx.fillStyle='rgba(158,143,126,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(123,168,196,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='center';
     ctx.fillText(w.label, x+bw/2, H-8);
     if(w.sets) { ctx.fillStyle='var(--t1)'; ctx.fillText(w.sets, x+bw/2, y-4); }
   });
