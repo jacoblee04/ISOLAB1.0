@@ -81,6 +81,9 @@ let S = {
   measurements: {},
   prs: [],
   tasks: [],
+  runs: [],
+  supplements: [],
+  suppLog: {},
   program: null,
   currentTab: { training: 'program' },
 };
@@ -411,6 +414,28 @@ function updateSidebarUser() {
 let currentPage = 'dashboard';
 
 function showPage(id) {
+  // Guard: warn if leaving an active workout
+  if(activeWorkout && id !== 'training') {
+    if(!confirm('You have an active workout in progress. Leave and discard it?')) return;
+    activeWorkout = null;
+    clearInterval(elapsedInterval);
+    stopRestTimer();
+    // Restore normal training page
+    const tp=$('page-training');
+    if(tp) tp.innerHTML=`
+      <div class="page-header">
+        <div><div class="page-title">Training</div><div class="page-sub">Log sessions, view your program & explore exercises</div></div>
+        <div class="header-actions"><button class="btn btn-blue" onclick="openQuickLog()">+ Log Workout</button></div>
+      </div>
+      <div class="tabs" id="training-tabs">
+        <button class="tab active" onclick="showTrainingTab('program')">My Program</button>
+        <button class="tab" onclick="showTrainingTab('log')">Workout Log</button>
+        <button class="tab" onclick="showTrainingTab('library')">Exercise Library</button>
+      </div>
+      <div id="training-program"></div>
+      <div id="training-log" class="hidden"></div>
+      <div id="training-library" class="hidden"></div>`;
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item, .bnav-item').forEach(b=>{
     b.classList.toggle('active', b.dataset.page===id);
@@ -419,15 +444,18 @@ function showPage(id) {
   if(page) page.classList.add('active');
   currentPage = id;
   const renders = {
-    dashboard: renderDashboard,
-    training:  renderTraining,
-    meals:     renderMeals,
-    planner:   renderPlanner,
-    calendar:  renderCalendar,
-    notes:     renderNotes,
-    budget:    renderBudget,
-    progress:  renderProgress,
-    profile:   renderProfile,
+    dashboard:   renderDashboard,
+    training:    renderTraining,
+    meals:       renderMeals,
+    planner:     renderPlanner,
+    calendar:    renderCalendar,
+    notes:       renderNotes,
+    budget:      renderBudget,
+    progress:    renderProgress,
+    profile:     renderProfile,
+    running:     renderRunning,
+    supplements: renderSupplements,
+    more:        renderMore,
   };
   if(renders[id]) renders[id]();
 }
@@ -445,31 +473,69 @@ function renderDashboard() {
   const streak = calcHabitStreak();
   $('streak-badge').innerHTML = `🔥 ${streak} day streak`;
 
-  // Stats
-  const weekWorkouts = S.workouts.filter(w=> daysBetween(w.date,todayStr())<=6).length;
+  // Daily score items
+  const today = todayStr();
+  const doneCt = (S.habitLog[today]||[]).length;
+  const habTotal = S.habits.length;
+  const todayCals = S.meals.filter(m=>m.date===today).reduce((a,m)=>a+m.cal,0);
+  const calTarget = user.targets?.calories||2000;
+  const calDone = todayCals >= calTarget*0.9 && todayCals <= calTarget*1.15;
+  const workedOut = S.workouts.some(w=>w.date===today) || S.runs.some(r=>r.date===today);
+  const weightLogged = S.weightLog.some(w=>w.date===today);
+  const scoreItems = [
+    {label:'Habits', val:`${doneCt}/${habTotal}`, done: habTotal>0&&doneCt===habTotal, color:'var(--blue3)'},
+    {label:'Nutrition', val:calDone?'On target':'Not logged', done:calDone, color:'var(--green)'},
+    {label:'Training', val:workedOut?'Completed':'Not done', done:workedOut, color:'var(--gold)'},
+    {label:'Weight check-in', val:weightLogged?'Logged':'Pending', done:weightLogged, color:'var(--cyan)'},
+  ];
+  const scoreTotal = scoreItems.filter(s=>s.done).length;
+  const scorePct   = Math.round(scoreTotal/scoreItems.length*100);
+  const r=42, circ=2*Math.PI*r;
+  const dash = circ*(1-scorePct/100);
+  $('coach-card').outerHTML = `
+    <div class="daily-score-card" id="coach-card" style="margin-bottom:20px">
+      <div class="score-ring-wrap">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--bg3)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="${r}" fill="none"
+            stroke="${scorePct>=75?'var(--green)':scorePct>=50?'var(--gold)':'var(--blue2)'}"
+            stroke-width="8" stroke-linecap="round"
+            stroke-dasharray="${circ}" stroke-dashoffset="${dash}"
+            style="transition:stroke-dashoffset 0.6s ease"/>
+        </svg>
+        <div class="score-ring-label">
+          <div class="score-pct">${scorePct}%</div>
+          <div class="score-pct-sub">TODAY</div>
+        </div>
+      </div>
+      <div>
+        <div class="coach-label">🧠 Your Coach</div>
+        <div class="coach-msg" id="coach-msg" style="margin-bottom:12px">${getCoachMessage()}</div>
+        <div class="score-items">
+          ${scoreItems.map(s=>`<div class="score-item">
+            <div class="score-dot" style="background:${s.done?s.color:'var(--t3)'}"></div>
+            <span class="score-item-label">${s.label}</span>
+            <span class="score-item-val" style="color:${s.done?s.color:'var(--t3)'}">${s.val}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  // Quick stats
+  const weekWorkouts = S.workouts.filter(w=>daysBetween(w.date,today)<=6).length;
   $('stat-workouts').textContent = weekWorkouts;
-  const todayMeals = S.meals.filter(m=>m.date===todayStr());
-  const todayCals  = todayMeals.reduce((a,m)=>a+m.cal,0);
-  $('stat-cals').textContent     = todayCals;
-  $('stat-cals-sub').textContent = 'of '+(user.targets?.calories||2000)+' kcal';
-  const thisMonth = new Date().toISOString().slice(0,7);
-  const income  = S.budget.filter(b=>b.type==='income' && b.date.startsWith(thisMonth)).reduce((a,b)=>a+b.amount,0);
-  const expense = S.budget.filter(b=>b.type==='expense'&& b.date.startsWith(thisMonth)).reduce((a,b)=>a+b.amount,0);
+  $('stat-cals').textContent     = Math.round(todayCals);
+  $('stat-cals-sub').textContent = 'of '+calTarget+' kcal';
+  const thisMonth = now.toISOString().slice(0,7);
+  const income  = S.budget.filter(b=>b.type==='income' &&b.date.startsWith(thisMonth)).reduce((a,b)=>a+b.amount,0);
+  const expense = S.budget.filter(b=>b.type==='expense'&&b.date.startsWith(thisMonth)).reduce((a,b)=>a+b.amount,0);
   $('stat-budget').textContent = fmtMoney(income-expense);
   const lastW = S.weightLog.slice(-1)[0];
-  $('stat-weight').textContent      = lastW ? lastW.kg+'kg' : '–';
-  $('stat-weight-sub').textContent  = lastW ? fmtDate(lastW.date) : 'not logged';
+  $('stat-weight').textContent     = lastW ? lastW.kg+'kg' : '–';
+  $('stat-weight-sub').textContent = lastW ? fmtDate(lastW.date) : 'not logged';
 
-  // Coach message
-  $('coach-msg').textContent = getCoachMessage();
-
-  // Today's workout
   renderTodayWorkoutCard();
-
-  // Habits
   renderHabits();
-
-  // Recent workouts
   renderRecentWorkouts();
 }
 
@@ -543,7 +609,13 @@ function renderHabits() {
       </div>
       <span class="habit-name ${done.includes(h.id)?'done':''}">${h.icon} ${h.name}</span>
       <span class="habit-streak">${getHabitStreak(h.id)}🔥</span>
-    </div>`).join('') || '<div style="color:var(--t2);font-size:14px">No habits yet. Add one!</div>';
+      <button style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;padding:4px 6px;margin-left:4px" onclick="deleteHabit('${h.id}');event.stopPropagation()" title="Remove habit">×</button>
+    </div>`).join('') || '<div style="color:var(--t2);font-size:14px;padding:8px 0">No habits yet. Add one to get started!</div>';
+}
+
+function deleteHabit(id) {
+  S.habits = S.habits.filter(h=>h.id!==id);
+  save('habits',S.habits); renderHabits();
 }
 
 function getHabitStreak(id) {
@@ -611,6 +683,7 @@ let activeWorkout = null;
 let workoutStartTime = null;
 
 function renderTraining() {
+  if(activeWorkout) { renderActiveWorkout(); return; }
   showTrainingTab(S.currentTab.training||'program');
 }
 
@@ -1733,6 +1806,256 @@ function confirmReset() {
 
 function resetApp() {
   localStorage.clear(); location.reload();
+}
+
+// ─── RUNNING / CARDIO ─────────────────────────────────────────
+const RUN_TYPES = {
+  Run:    {icon:'🏃', color:'#4a60f0', bg:'rgba(74,96,240,0.12)'},
+  Cycle:  {icon:'🚴', color:'#00e676', bg:'rgba(0,230,118,0.12)'},
+  Swim:   {icon:'🏊', color:'#00d4ff', bg:'rgba(0,212,255,0.12)'},
+  Row:    {icon:'🚣', color:'#f0b429', bg:'rgba(240,180,41,0.12)'},
+  HIIT:   {icon:'⚡', color:'#ff4d6d', bg:'rgba(255,77,109,0.12)'},
+  Walk:   {icon:'🚶', color:'#b06cff', bg:'rgba(176,108,255,0.12)'},
+  Other:  {icon:'🏅', color:'#90a4ae', bg:'rgba(144,164,174,0.12)'},
+};
+
+function renderRunning() {
+  const typeFilter = $('run-type-filter')?.value||'';
+  const runs = S.runs.slice().filter(r=>!typeFilter||r.type===typeFilter).sort((a,b)=>b.date.localeCompare(a.date));
+
+  // Weekly stats
+  const today = todayStr();
+  const weekRuns = S.runs.filter(r=>daysBetween(r.date,today)<=6);
+  const totalKm  = weekRuns.reduce((a,r)=>a+(parseFloat(r.distanceKm)||0),0);
+  const totalMin = weekRuns.reduce((a,r)=>a+(parseFloat(r.durationMin)||0),0);
+  const avgPace  = totalKm>0 ? totalMin/totalKm : 0;
+  $('run-weekly-stats').innerHTML = `
+    <div class="stat-card stat-blue"><div class="stat-label">Sessions</div><div class="stat-value">${weekRuns.length}</div><div class="stat-sub">this week</div></div>
+    <div class="stat-card stat-cyan"><div class="stat-label">Distance</div><div class="stat-value">${totalKm.toFixed(1)}</div><div class="stat-sub">km this week</div></div>
+    <div class="stat-card stat-green"><div class="stat-label">Time</div><div class="stat-value">${Math.floor(totalMin/60)}h${Math.round(totalMin%60)}m</div><div class="stat-sub">this week</div></div>
+    <div class="stat-card stat-gold"><div class="stat-label">Avg Pace</div><div class="stat-value">${avgPace>0?fmtPace(avgPace):'–'}</div><div class="stat-sub">min / km</div></div>`;
+
+  $('run-log-list').innerHTML = runs.length ? runs.map(r=>{
+    const t = RUN_TYPES[r.type]||RUN_TYPES.Other;
+    const pace = r.distanceKm>0 ? r.durationMin/r.distanceKm : 0;
+    return `<div class="run-entry">
+      <div class="run-icon" style="background:${t.bg};border:1px solid ${t.color}30">${t.icon}</div>
+      <div class="run-info">
+        <div class="run-type">${r.type}</div>
+        <div class="run-meta">${fmtDate(r.date)}${r.notes?' · '+r.notes:''}</div>
+      </div>
+      <div class="run-stats">
+        <div class="run-distance" style="color:${t.color}">${r.distanceKm?r.distanceKm+'km':r.durationMin+'min'}</div>
+        ${r.distanceKm&&r.durationMin?`<div class="run-pace">${fmtPace(pace)} /km · ${r.durationMin}min</div>`:''}
+      </div>
+      <button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:4px 8px;margin-left:4px" onclick="deleteRun('${r.id}')">×</button>
+    </div>`;
+  }).join('')
+  : '<div class="empty-state" style="padding:40px"><div class="empty-state-icon">🏃</div><h3>No sessions logged yet</h3><p>Track your first cardio session</p></div>';
+}
+
+function fmtPace(minPerKm) {
+  const m=Math.floor(minPerKm), s=Math.round((minPerKm-m)*60);
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function openAddRun() {
+  openModal(`
+    <div class="modal-header"><div class="modal-title">Log Cardio Session</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Activity Type</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+          ${Object.entries(RUN_TYPES).map(([k,v])=>`
+            <button class="ob-option" data-rtype="${k}" style="flex-direction:column;align-items:center;padding:12px 8px;gap:4px">
+              <span style="font-size:22px">${v.icon}</span>
+              <span style="font-size:12px">${k}</span>
+            </button>`).join('')}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Distance (km)</label><input class="form-input" id="run-dist" type="number" step="0.01" placeholder="e.g. 5.0"></div>
+        <div class="form-group"><label class="form-label">Duration (min)</label><input class="form-input" id="run-dur" type="number" placeholder="e.g. 30"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="run-date" type="date" value="${todayStr()}"></div>
+        <div class="form-group"><label class="form-label">Feeling</label>
+          <select class="form-select" id="run-feel"><option value="">–</option><option>Easy</option><option>Moderate</option><option>Hard</option><option>Max effort</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><input class="form-input" id="run-notes" placeholder="Route, conditions, how it felt…"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-blue" onclick="addRun()">Save Session</button>
+    </div>`);
+  // attach selection
+  document.querySelectorAll('.ob-option[data-rtype]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.ob-option[data-rtype]').forEach(b=>b.classList.remove('sel'));
+      btn.classList.add('sel');
+    });
+  });
+}
+
+function addRun() {
+  const typeBtn = document.querySelector('.ob-option.sel[data-rtype]');
+  const type   = typeBtn ? typeBtn.dataset.rtype : 'Run';
+  const dist   = parseFloat($('run-dist')?.value)||0;
+  const dur    = parseFloat($('run-dur')?.value)||0;
+  if(!dist&&!dur){ alert('Enter distance or duration.'); return; }
+  S.runs.push({
+    id:uid(), date:$('run-date')?.value||todayStr(),
+    type, distanceKm:dist, durationMin:dur,
+    feel:$('run-feel')?.value||'', notes:$('run-notes')?.value||'',
+  });
+  save('runs',S.runs); closeModal(); renderRunning();
+  if(currentPage==='dashboard') renderDashboard();
+}
+
+function deleteRun(id) {
+  S.runs=S.runs.filter(r=>r.id!==id); save('runs',S.runs); renderRunning();
+}
+
+// ─── SUPPLEMENTS ──────────────────────────────────────────────
+const SUPP_TIMINGS = ['Morning','Pre-Workout','With Meals','Evening','Other'];
+const SUPP_ICONS   = {Morning:'🌅',Prebis:'⚡','Pre-Workout':'⚡','With Meals':'🍽️',Evening:'🌙',Other:'💊'};
+
+function renderSupplements() {
+  const today = todayStr();
+  const taken = S.suppLog[today]||[];
+
+  // Completion ring
+  const pct = S.supplements.length ? Math.round(taken.length/S.supplements.length*100) : 0;
+  const r2=36, circ2=2*Math.PI*r2;
+  $('supp-progress-wrap').innerHTML = `
+    <div style="display:flex;align-items:center;gap:20px">
+      <div style="position:relative;width:90px;height:90px;flex-shrink:0">
+        <svg width="90" height="90" viewBox="0 0 90 90" style="transform:rotate(-90deg)">
+          <circle cx="45" cy="45" r="${r2}" fill="none" stroke="var(--bg3)" stroke-width="8"/>
+          <circle cx="45" cy="45" r="${r2}" fill="none"
+            stroke="${pct===100?'var(--green)':'var(--cyan)'}" stroke-width="8" stroke-linecap="round"
+            stroke-dasharray="${circ2}" stroke-dashoffset="${circ2*(1-pct/100)}"
+            style="transition:stroke-dashoffset 0.5s ease"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div style="font-size:20px;font-weight:900">${pct}%</div>
+          <div style="font-size:9px;color:var(--t2);font-weight:600;letter-spacing:1px">DONE</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:900;color:var(--cyan)">${taken.length}<span style="font-size:16px;color:var(--t2);font-weight:400"> / ${S.supplements.length}</span></div>
+        <div style="font-size:13px;color:var(--t2)">supplements taken today</div>
+        ${pct===100?'<div style="margin-top:8px;font-size:13px;font-weight:700;color:var(--green)">✓ Stack complete!</div>':''}
+      </div>
+    </div>`;
+
+  // Today's schedule grouped by timing
+  if(!S.supplements.length) {
+    $('supp-today-list').innerHTML='<div style="color:var(--t2);font-size:14px;padding:10px 0">No supplements added yet.</div>';
+  } else {
+    $('supp-today-list').innerHTML = SUPP_TIMINGS.map(timing=>{
+      const group = S.supplements.filter(s=>s.timing===timing);
+      if(!group.length) return '';
+      return `<div class="supp-timing-group">
+        <div class="supp-timing-label">${SUPP_ICONS[timing]||'💊'} ${timing}</div>
+        ${group.map(s=>`<div class="supp-item">
+          <button class="supp-check ${taken.includes(s.id)?'done':''}" onclick="toggleSupp('${s.id}')">
+            ${taken.includes(s.id)?`<svg viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="3" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`:''}
+          </button>
+          <div style="flex:1">
+            <div class="supp-name">${s.name}</div>
+            <div class="supp-dose">${s.dose} ${s.unit}</div>
+            ${s.purpose?`<div class="supp-purpose">${s.purpose}</div>`:''}
+          </div>
+        </div>`).join('')}
+      </div>`;
+    }).join('');
+  }
+
+  // All supplements list
+  $('supp-all-list').innerHTML = S.supplements.length ? S.supplements.map(s=>`
+    <div class="supp-stack-item">
+      <div class="supp-stack-icon">💊</div>
+      <div style="flex:1">
+        <div class="supp-stack-name">${s.name}</div>
+        <div class="supp-stack-meta">${s.dose} ${s.unit} · ${s.timing}${s.purpose?' · '+s.purpose:''}</div>
+      </div>
+      <div class="supp-stack-actions">
+        <button class="btn btn-outline btn-sm" onclick="openEditSupplement('${s.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteSupplement('${s.id}')">✕</button>
+      </div>
+    </div>`).join('')
+  : '<div class="empty-state" style="padding:30px"><div class="empty-state-icon">💊</div><h3>No supplements added</h3><p>Build your daily stack</p></div>';
+}
+
+function toggleSupp(id) {
+  const today=todayStr();
+  if(!S.suppLog[today]) S.suppLog[today]=[];
+  const idx=S.suppLog[today].indexOf(id);
+  if(idx>-1) S.suppLog[today].splice(idx,1); else S.suppLog[today].push(id);
+  save('suppLog',S.suppLog); renderSupplements();
+}
+
+function openAddSupplement(id) {
+  const s=id?S.supplements.find(x=>x.id===id):{};
+  openModal(`
+    <div class="modal-header"><div class="modal-title">${id?'Edit':'Add'} Supplement</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Supplement Name</label><input class="form-input" id="s-name" placeholder="e.g. Creatine, Vitamin D…" value="${s.name||''}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Dose</label><input class="form-input" id="s-dose" placeholder="e.g. 5" value="${s.dose||''}"></div>
+        <div class="form-group"><label class="form-label">Unit</label>
+          <select class="form-select" id="s-unit">
+            ${['g','mg','mcg','ml','IU','capsule','tablet','scoop'].map(u=>`<option ${(s.unit||'g')===u?'selected':''}>${u}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Timing</label>
+        <select class="form-select" id="s-timing">
+          ${SUPP_TIMINGS.map(t=>`<option ${(s.timing||'Morning')===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Purpose / Note</label><input class="form-input" id="s-purpose" placeholder="e.g. Strength, recovery, sleep…" value="${s.purpose||''}"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-blue" onclick="saveSupplement('${id||''}')">Save</button>
+    </div>`);
+}
+
+function openEditSupplement(id) { openAddSupplement(id); }
+
+function saveSupplement(id) {
+  const name=$('s-name')?.value.trim(); if(!name) return;
+  const entry={id:id||uid(), name, dose:$('s-dose')?.value||'', unit:$('s-unit')?.value||'g', timing:$('s-timing')?.value||'Morning', purpose:$('s-purpose')?.value||''};
+  if(id) { const idx=S.supplements.findIndex(s=>s.id===id); if(idx>-1) S.supplements[idx]=entry; }
+  else S.supplements.push(entry);
+  save('supplements',S.supplements); closeModal(); renderSupplements();
+}
+
+function deleteSupplement(id) {
+  S.supplements=S.supplements.filter(s=>s.id!==id); save('supplements',S.supplements); renderSupplements();
+}
+
+// ─── MORE PAGE (mobile hub) ────────────────────────────────────
+function renderMore() {
+  const today=todayStr();
+  const tiles = [
+    {page:'calendar',    icon:'📅', label:'Calendar',    sub:'Events & schedule'},
+    {page:'notes',       icon:'📝', label:'Notes',       sub:`${S.notes.length} notes`},
+    {page:'budget',      icon:'💰', label:'Budget',      sub:'Track spending'},
+    {page:'progress',    icon:'📊', label:'Progress',    sub:`${S.weightLog.length} check-ins`},
+    {page:'running',     icon:'🏃', label:'Cardio',      sub:`${S.runs.length} sessions`},
+    {page:'supplements', icon:'💊', label:'Supplements', sub:`${(S.suppLog[today]||[]).length}/${S.supplements.length} today`},
+    {page:'profile',     icon:'⚙️', label:'Profile',     sub:S.user?.name||''},
+  ];
+  $('more-grid').innerHTML = tiles.map(t=>`
+    <div class="more-tile" onclick="showPage('${t.page}')">
+      <div class="more-tile-icon">${t.icon}</div>
+      <div class="more-tile-label">${t.label}</div>
+      <div class="more-tile-sub">${t.sub}</div>
+    </div>`).join('');
 }
 
 // ─── MODAL ────────────────────────────────────────────────────

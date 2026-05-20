@@ -70,6 +70,15 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
         Progress
       </button>
+      <span class="nav-section-label">Health</span>
+      <button class="nav-item" onclick="showPage('running')" data-page="running">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13" cy="4" r="2"/><path d="M5.5 18.5l2.5-7L11 14l3-8 2.5 3.5L19 7"/></svg>
+        Cardio
+      </button>
+      <button class="nav-item" onclick="showPage('supplements')" data-page="supplements">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="8" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+        Supplements
+      </button>
     </div>
     <div class="sidebar-footer">
       <div class="user-pill" onclick="showPage('profile')">
@@ -386,6 +395,62 @@
       </div>
     </div>
 
+    <!-- ══ RUNNING / CARDIO ══ -->
+    <div id="page-running" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Cardio</div><div class="page-sub">Runs, rides, rows & more</div></div>
+        <div class="header-actions">
+          <button class="btn btn-blue" onclick="openAddRun()">+ Log Session</button>
+        </div>
+      </div>
+      <div class="grid-4" style="margin-bottom:20px" id="run-weekly-stats"></div>
+      <div class="card">
+        <div class="section-header">
+          <div class="section-title">Activity Log</div>
+          <select class="form-select" style="width:140px" id="run-type-filter" onchange="renderRunning()">
+            <option value="">All types</option>
+            <option>Run</option><option>Cycle</option><option>Swim</option>
+            <option>Row</option><option>HIIT</option><option>Walk</option><option>Other</option>
+          </select>
+        </div>
+        <div id="run-log-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ SUPPLEMENTS ══ -->
+    <div id="page-supplements" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Supplements</div><div class="page-sub">Your daily stack & schedule</div></div>
+        <div class="header-actions">
+          <button class="btn btn-blue" onclick="openAddSupplement()">+ Add Supplement</button>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-title">Today's Completion</div>
+          <div id="supp-progress-wrap"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Today's Schedule</div>
+          <div id="supp-today-list"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-header">
+          <div class="section-title">My Stack</div>
+        </div>
+        <div id="supp-all-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ MORE (mobile hub) ══ -->
+    <div id="page-more" class="page">
+      <div class="page-header">
+        <div><div class="page-title">More</div></div>
+      </div>
+      <div class="more-grid" id="more-grid"></div>
+    </div>
+
   </main>
 
   <!-- BOTTOM NAV (mobile) -->
@@ -406,9 +471,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg>
       <span>Plan</span>
     </button>
-    <button class="bnav-item" onclick="showPage('profile')" data-page="profile">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Profile</span>
+    <button class="bnav-item" onclick="showPage('more')" data-page="more">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>
+      <span>More</span>
     </button>
   </nav>
 

@@ -753,3 +753,137 @@ body {
   .week-days { gap: 2px; }
   .week-day-col { padding: 6px 2px; }
 }
+
+/* ─── DAILY SCORE ─────────────────────────── */
+.daily-score-card {
+  background: linear-gradient(135deg, rgba(39,56,200,0.18), rgba(0,212,255,0.06));
+  border: 1px solid rgba(39,56,200,0.3); border-radius: var(--r); padding: 20px;
+  display: flex; align-items: center; gap: 24px; margin-bottom: 20px;
+}
+.score-ring-wrap { position: relative; flex-shrink: 0; }
+.score-ring-wrap svg { transform: rotate(-90deg); }
+.score-ring-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-pct { font-size: 22px; font-weight: 900; line-height: 1; }
+.score-pct-sub { font-size: 10px; color: var(--t2); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.score-items { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.score-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.score-item-label { flex: 1; color: var(--t2); }
+.score-item-val { font-weight: 700; }
+
+/* ─── RUNNING / CARDIO ────────────────────── */
+.run-entry {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.run-entry:last-child { border-bottom: none; }
+.run-icon {
+  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.run-info { flex: 1; }
+.run-type { font-size: 15px; font-weight: 700; }
+.run-meta { font-size: 12px; color: var(--t2); margin-top: 2px; }
+.run-stats { text-align: right; }
+.run-distance { font-size: 20px; font-weight: 900; }
+.run-pace { font-size: 12px; color: var(--t2); }
+.run-type-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+}
+
+/* ─── SUPPLEMENTS ─────────────────────────── */
+.supp-timing-group { margin-bottom: 16px; }
+.supp-timing-label {
+  font-size: 10px; letter-spacing: 2px; color: var(--t3); font-weight: 700;
+  text-transform: uppercase; padding: 10px 0 6px; border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.supp-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.supp-item:last-child { border-bottom: none; }
+.supp-check {
+  width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all var(--trans); flex-shrink: 0;
+  background: none;
+}
+.supp-check.done { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 12px rgba(0,212,255,0.3); }
+.supp-name { font-size: 14px; font-weight: 600; flex: 1; }
+.supp-dose { font-size: 12px; color: var(--t2); }
+.supp-purpose { font-size: 11px; color: var(--t3); margin-top: 1px; }
+.supp-completion-ring { margin: 10px auto; }
+.supp-stack-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 14px; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: var(--r-sm); margin-bottom: 8px;
+}
+.supp-stack-icon {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.15);
+}
+.supp-stack-name { font-size: 15px; font-weight: 700; }
+.supp-stack-meta { font-size: 12px; color: var(--t2); margin-top: 2px; }
+.supp-stack-actions { display: flex; gap: 6px; }
+
+/* ─── MORE / HUB PAGE ─────────────────────── */
+.more-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.more-tile {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 22px 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  cursor: pointer; transition: all var(--trans); text-align: center;
+}
+.more-tile:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.more-tile:active { transform: translateY(-1px); }
+.more-tile-icon { font-size: 32px; }
+.more-tile-label { font-size: 14px; font-weight: 700; }
+.more-tile-sub { font-size: 11px; color: var(--t2); }
+
+/* ─── GOAL PROGRESS CARD ──────────────────── */
+.goal-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px; overflow: hidden;
+  position: relative;
+}
+.goal-card::after {
+  content: ''; position: absolute; right: -20px; top: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle, var(--glow), transparent 70%);
+}
+.goal-card-label { font-size: 11px; color: var(--t2); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+.goal-card-val { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+.goal-card-sub { font-size: 12px; color: var(--t2); margin-bottom: 10px; }
+
+/* ─── ACTIVE WORKOUT HEADER ───────────────── */
+.workout-active-banner {
+  background: linear-gradient(135deg, rgba(39,56,200,0.2), rgba(0,212,255,0.05));
+  border-bottom: 1px solid var(--border2);
+  padding: 10px 28px; display: flex; align-items: center; gap: 16px;
+  font-size: 14px;
+}
+.workout-active-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse-dot 1.5s ease-in-out infinite; flex-shrink: 0; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.5)} }
+
+/* ─── HABIT HEATMAP ───────────────────────── */
+.habit-heatmap { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 12px; }
+.hmap-cell { width: 12px; height: 12px; border-radius: 3px; background: var(--bg3); transition: background var(--trans); }
+.hmap-cell.l1 { background: rgba(39,56,200,0.25); }
+.hmap-cell.l2 { background: rgba(39,56,200,0.5); }
+.hmap-cell.l3 { background: rgba(39,56,200,0.75); }
+.hmap-cell.l4 { background: var(--blue2); box-shadow: 0 0 4px var(--glow); }
+
+@media (max-width: 768px) {
+  .more-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .more-tile { padding: 16px 10px; }
+  .more-tile-icon { font-size: 26px; }
+  .daily-score-card { flex-direction: row; }
+}
+@media (max-width: 400px) {
+  .more-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+}
