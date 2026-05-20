@@ -789,7 +789,10 @@ function showTrainingTab(tab) {
 
 function renderProgram() {
   const prog = S.program;
-  if(!prog){ $('training-program').innerHTML='<div class="empty-state">No program generated. Please complete your profile.</div>'; return; }
+  if(!prog){
+    $('training-program').innerHTML=`<div class="empty-state"><div class="empty-state-icon">📋</div><h3>No program yet</h3><p>Generate a personalised plan based on your profile</p><button class="btn btn-blue" style="margin-top:16px" onclick="regenerateProgram()">Generate My Program</button></div>`;
+    return;
+  }
   const dow = ((new Date().getDay()-1+7)%7);
   $('training-program').innerHTML = `
     <div class="card" style="margin-bottom:20px">
@@ -806,6 +809,14 @@ function renderProgram() {
     </div>`;
 }
 
+function regenerateProgram() {
+  if(!S.user) return;
+  S.program = generateProgram(S.user);
+  save('program', S.program);
+  renderProgram();
+  if(currentPage==='dashboard') renderTodayWorkoutCard();
+}
+
 function renderWorkoutLog() {
   const logs = S.workouts.slice().reverse();
   $('training-log').innerHTML = logs.length ? logs.map(w=>`
@@ -813,7 +824,7 @@ function renderWorkoutLog() {
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
         <div>
           <div style="font-size:18px;font-weight:700">${w.name}</div>
-          <div style="font-size:13px;color:var(--t2)">${fmtDate(w.date)} · ${w.duration}min · ${w.totalSets} sets</div>
+          <div style="font-size:13px;color:var(--t2)">${fmtDate(w.date)} · ${w.duration}min · ${w.totalSets??(w.exercises||[]).reduce((a,e)=>a+(e.sets?.length||0),0)} sets</div>
         </div>
         <button class="btn btn-danger btn-sm" onclick="deleteWorkout('${w.id}')">Delete</button>
       </div>
@@ -1445,7 +1456,7 @@ function renderCalEvents() {
   const workouts = S.workouts.filter(w=>w.date===date);
   const meals = S.meals.filter(m=>m.date===date);
   let html = '';
-  workouts.forEach(w=>{ html+=`<div class="event-item"><div class="cal-dot workout" style="width:10px;height:10px"></div><div class="event-info"><div class="event-title">💪 ${w.name}</div><div class="event-time">${w.duration}min · ${w.totalSets} sets</div></div></div>`; });
+  workouts.forEach(w=>{ const sets=w.totalSets??(w.exercises||[]).reduce((a,e)=>a+(e.sets?.length||0),0); html+=`<div class="event-item"><div class="cal-dot workout" style="width:10px;height:10px"></div><div class="event-info"><div class="event-title">💪 ${w.name}</div><div class="event-time">${w.duration}min · ${sets} sets</div></div></div>`; });
   if(meals.length){ html+=`<div class="event-item"><div class="cal-dot meal" style="width:10px;height:10px"></div><div class="event-info"><div class="event-title">🥗 ${meals.length} meals logged</div><div class="event-time">${meals.reduce((a,m)=>a+m.cal,0)} kcal</div></div></div>`; }
   evs.forEach(e=>{ html+=`<div class="event-item"><div class="event-dot" style="background:var(--gold)"></div><div class="event-info"><div class="event-title">${e.title}</div><div class="event-time">${e.time||'All day'}${e.note?' · '+e.note:''}</div></div><button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px" onclick="deleteEvent('${e.id}')">✕</button></div>`; });
   $('cal-events-list').innerHTML = html || '<div style="color:var(--t2);padding:20px 0;font-size:14px">No events on this day. Click "+ Add Event" to schedule something.</div>';
@@ -1667,7 +1678,7 @@ function deleteBudgetEntry(id) {
 
 // ─── PROGRESS ─────────────────────────────────────────────────
 function renderProgress() {
-  const logs = S.weightLog.slice(-30);
+  const logs = S.weightLog.slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(-30);
   const latest = logs.slice(-1)[0];
   const prev   = logs.length>1?logs[logs.length-2]:null;
   $('current-weight').textContent = latest?latest.kg+'kg':'–';
@@ -1714,16 +1725,16 @@ function drawWeightChart(logs) {
   ctx.clearRect(0,0,W,H);
 
   // Grid
-  ctx.strokeStyle='rgba(80,100,255,0.1)'; ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(190,158,108,0.10)'; ctx.lineWidth=1;
   for(let i=0;i<=4;i++){
     const y=pad+(H-pad*2)*(1-i/4);
     ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke();
-    ctx.fillStyle='rgba(136,153,204,0.6)'; ctx.font='10px system-ui'; ctx.textAlign='right';
+    ctx.fillStyle='rgba(158,143,126,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='right';
     ctx.fillText((minV+(maxV-minV)*i/4).toFixed(1), pad-4, y+4);
   }
 
   if(logs.length<2){
-    ctx.fillStyle='rgba(91,116,255,0.8)'; ctx.font='13px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(196,150,58,0.8)'; ctx.font='13px system-ui'; ctx.textAlign='center';
     ctx.fillText('Log more weights to see your trend', W/2, H/2); return;
   }
 
@@ -1733,8 +1744,8 @@ function drawWeightChart(logs) {
 
   // Gradient fill
   const grad=ctx.createLinearGradient(0,pad,0,H-pad);
-  grad.addColorStop(0,'rgba(39,56,200,0.3)');
-  grad.addColorStop(1,'rgba(39,56,200,0)');
+  grad.addColorStop(0,'rgba(196,150,58,0.28)');
+  grad.addColorStop(1,'rgba(196,150,58,0)');
   ctx.beginPath(); ctx.moveTo(toX(0),toY(vals[0]));
   vals.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
   ctx.lineTo(toX(vals.length-1),H-pad); ctx.lineTo(toX(0),H-pad); ctx.closePath();
@@ -1743,13 +1754,13 @@ function drawWeightChart(logs) {
   // Line
   ctx.beginPath(); ctx.moveTo(toX(0),toY(vals[0]));
   vals.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
-  ctx.strokeStyle='#4a60f0'; ctx.lineWidth=2; ctx.stroke();
+  ctx.strokeStyle='#c4963a'; ctx.lineWidth=2; ctx.stroke();
 
   // Dots
   vals.forEach((v,i)=>{
     ctx.beginPath(); ctx.arc(toX(i),toY(v),4,0,Math.PI*2);
-    ctx.fillStyle='#4a60f0'; ctx.fill();
-    ctx.strokeStyle='#07071a'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#c4963a'; ctx.fill();
+    ctx.strokeStyle='#0e0c0a'; ctx.lineWidth=2; ctx.stroke();
   });
 }
 
@@ -1778,10 +1789,10 @@ function drawVolumeChart() {
     const bh=Math.max((w.sets/maxV)*(H-pad*2),2);
     const y=H-pad-bh;
     const grad=ctx.createLinearGradient(0,y,0,H-pad);
-    grad.addColorStop(0,'#4a60f0'); grad.addColorStop(1,'rgba(39,56,200,0.2)');
+    grad.addColorStop(0,'#c4963a'); grad.addColorStop(1,'rgba(138,101,32,0.2)');
     ctx.fillStyle=grad;
     ctx.beginPath(); ctx.rect(x,y,bw,bh); ctx.fill();
-    ctx.fillStyle='rgba(136,153,204,0.6)'; ctx.font='10px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(158,143,126,0.7)'; ctx.font='10px system-ui'; ctx.textAlign='center';
     ctx.fillText(w.label, x+bw/2, H-8);
     if(w.sets) { ctx.fillStyle='var(--t1)'; ctx.fillText(w.sets, x+bw/2, y-4); }
   });
